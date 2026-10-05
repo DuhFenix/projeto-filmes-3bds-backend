@@ -1,6 +1,7 @@
 import express from "express";
 import filmesRoutes from "./modules/Filmes/filmesRoutes";
 import pool from "./db";
+import cors from 'cors';
 
 try {
   const app = express();
@@ -9,6 +10,7 @@ try {
   const [rows] = await pool.query('SELECT NOW() AS now');
   console.log('DB conectado, resultado:', rows);
 
+  app.use(cors());
   app.use(express.json());
 
 
