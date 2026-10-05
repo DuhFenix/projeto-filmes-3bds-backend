@@ -1,17 +1,26 @@
 import express from "express";
 import filmesRoutes from "./modules/Filmes/filmesRoutes";
+import pool from "./db";
 
-const app = express();
-const port = 3000;
+try {
+  const app = express();
+  const port = 3000;
 
-app.use(express.json());
+  const [rows] = await pool.query('SELECT NOW() AS now');
+  console.log('DB conectado, resultado:', rows);
 
-app.get("/", (req, res) => {
-  res.send("Hello, World!");
-});
+  app.use(express.json());
 
-filmesRoutes(app);
 
-app.listen(port, () => {
-  console.log(`Server is running at http://localhost:${port}`);
-});
+  app.get("/", (req, res) => {
+    res.send("Hello, World!");
+  });
+
+  filmesRoutes(app);
+
+  app.listen(port, () => {
+    console.log(`Server is running at http://localhost:${port}`);
+  });
+} catch (err) {
+  console.error('Erro de conexão:', err);
+}
