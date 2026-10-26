@@ -27,12 +27,10 @@ function filmesRoutes(app: express.Application) {
         try {
             const resultado = IFilmes.safeParse(req.body);
             if (!resultado.success) {
-                // ✨ MAPEAMENTO DIRETO: Extrai apenas a propriedade .message de cada erro encontrado
                 const mensagensDoZod = resultado.error.issues.map(issue => issue.message);
 
                 const respostaErro: IResponse = {
                     sucesso: false,
-                    // Junta todas as mensagens pulando uma linha para o seu alert no front
                     mensagem: "Erros de validação:\n" + mensagensDoZod.join("\n")
                 };
 
@@ -41,9 +39,8 @@ function filmesRoutes(app: express.Application) {
             else {
                 const filme = req.body;
 
-                const novoId = await createFilme(filme); // Guarda o ID retornado pela função
+                const novoId = await createFilme(filme);
 
-                // ✨ ADICIONE ESTA LINHA ABAIXO PARA RESPONDER O FRONT-END:
                 return res.status(201).json({ id: novoId, mensagem: "Filme Cadastrado com sucesso!" + novoId });
             }
 
